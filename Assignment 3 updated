@@ -1,0 +1,131 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+namespace UzairAhmadA03
+{
+    public class Candidate
+    {
+        public string name="name";
+        public string city="city";
+        public string cgpa="cgpa";
+        public Dictionary<string, string> D = new Dictionary<string, string>();
+        
+    }
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            //Dictionary<string, string> candidateData = new Dictionary<string, string>();
+            List<Dictionary<string, string>> L = new List<Dictionary<string, string>>();
+            Candidate C;
+            int maxCandidateThreshold = 3;
+            int maxCandidates = 0;
+            Console.WriteLine("Enter info: ");
+            while (maxCandidates < maxCandidateThreshold)
+            {
+                C = new Candidate();
+                Console.Write("Enter Candidate "+(maxCandidates+1)+" Name: ");
+                C.D[C.name] = Console.ReadLine();
+                Console.Write("Enter Candidate " + (maxCandidates + 1) + " City: ");
+                C.D[C.city] = Console.ReadLine();
+                Console.Write("Enter Candidate " + (maxCandidates + 1) + " CGPA: ");
+                C.D[C.cgpa] = Console.ReadLine();
+                L.Add(C.D);
+                if (maxCandidates < (maxCandidateThreshold - 1))
+                {
+                    Console.WriteLine("Do you want to enter more candidate data? (y/n)");
+                    string bookNextCandidate = Console.ReadLine();
+                    if (bookNextCandidate == "n")
+                    {
+                        break;
+                    }
+                }
+                maxCandidates++;
+            }
+            Console.WriteLine("Total Candidates: ");
+            foreach (var cand in L)
+            {
+                foreach (KeyValuePair<string, string> ele2 in cand)
+                {
+                    Console.Write("{0} : {1}", ele2.Key, ele2.Value + "  ");
+                }
+                Console.WriteLine();
+            }
+            List<Dictionary<string, string>> sortedCandidateList = new List<Dictionary<string, string>>();
+            foreach (var dictD in L)
+            {
+                foreach (var candDetail in dictD)
+                {
+                    if (candDetail.Key == "cgpa")
+                    {
+                        if (Convert.ToDouble(candDetail.Value) > 3.3)
+                        {
+                            sortedCandidateList.Add(dictD);
+                        }
+                    }
+                }
+            }
+            Console.WriteLine("ShortListed Candidates: ");
+            foreach (var sortCandDetail in sortedCandidateList)
+            {
+                Random rand = new Random();
+                for (int i = 0; i < 2; i++)
+                {
+                    sortCandDetail["marksP" + Convert.ToString(i + 1)] = Convert.ToString(rand.Next(1, 101));
+                }
+                foreach (KeyValuePair<string, string> ele2 in sortCandDetail)
+                {
+                    Console.Write("{0} : {1}", ele2.Key, ele2.Value + "  ");
+                }
+                Console.WriteLine();
+            }
+            List<Dictionary<string, string>> passedSortedCandidateList = new List<Dictionary<string, string>>();
+            foreach (var dictD in sortedCandidateList)
+            {
+                int j = 0;
+                double sum = 0;
+                foreach (var candDetail in dictD)
+                {
+                    if (candDetail.Key == "marksP" + Convert.ToString(j + 1))
+                    {
+                        sum += Convert.ToDouble(candDetail.Value);
+                        j++;
+                    }
+                }
+                if (sum > 0.2 * (j + 1) * 100)
+                {
+                    passedSortedCandidateList.Add(dictD);
+                }
+            }
+            Console.WriteLine("Passed Candidates");
+            foreach (var passSortCandDetail in passedSortedCandidateList)
+            {
+                foreach (KeyValuePair<string, string> ele2 in passSortCandDetail)
+                {
+                    Console.Write("{0} : {1}", ele2.Key, ele2.Value + "  ");
+                }
+                Console.WriteLine();
+            }
+            List<Dictionary<string, string>> citySortedCandidateList = new List<Dictionary<string, string>>();
+            foreach (var dictD in L)
+            {
+                foreach (var candDetail in dictD)
+                {
+                    if (candDetail.Value == "Rawalpindi")
+                    {
+                        citySortedCandidateList.Add(dictD);
+                    }
+                }
+            }
+            Console.WriteLine("City sorted:");
+            foreach (var citySortCandDetail in citySortedCandidateList)
+            {
+                foreach (KeyValuePair<string, string> ele2 in citySortCandDetail)
+                {
+                    Console.Write("{0} : {1}", ele2.Key, ele2.Value + "  ");
+                }
+                Console.WriteLine();
+            }
+        }
+    }
+}
