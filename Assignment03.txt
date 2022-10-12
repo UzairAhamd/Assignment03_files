@@ -1,0 +1,138 @@
+using System;
+using System.Collections.Generic;
+
+namespace Assignment03
+{
+    class Program
+    {
+        class Document
+        {
+            public string name;
+            public string path;
+            public string type;
+        }
+        class Candidate
+        {
+            public string name;
+            public string cnic;
+            public string mail;
+            public string city;
+            public double cgpa;
+
+            public List<Document> documents = new List<Document> { };
+            public List<Project> projects = new List<Project> { };
+        }
+        class Project
+        {
+            public string name;
+            public string date;
+            public int marks;
+        }
+        class CityRepo
+        {
+            public string city;
+
+            public List<string> sameCityCands = new List<string> { };
+        }
+        static void Main(string[] args)
+        {
+            Candidate C;
+            Document D;
+            Project P;
+
+            Random rnd = new Random();
+
+            List<Candidate> candidates = new List<Candidate> { };
+            List<Candidate> shortlstCands = new List<Candidate> { };
+            List<Candidate> topperCands = new List<Candidate> { };
+
+            Console.WriteLine("         Please provide your information as mentioned below ");
+
+            for(int i=0; i < 4; i++)
+            {
+                C = new Candidate();
+
+                Console.WriteLine("***************** Candidate {0} ********************",i+1);
+
+                Console.Write("Enter your name : ");
+                C.name = Console.ReadLine();
+                Console.Write("Enter your mail : ");
+                C.mail = Console.ReadLine();
+                Console.Write("Enter your CNIC : ");
+                C.cnic = Console.ReadLine();
+                Console.Write("Enter your city : ");
+                C.city = Console.ReadLine();
+                Console.Write("Enter your CGPA : ");
+                C.cgpa = Convert.ToDouble(Console.ReadLine());
+
+                //for(int j = 0; j < 3; j++)
+                //{
+
+                //    D = new Document();
+
+                //    Console.Write("Enter your document name : ");
+                //    D.name = Console.ReadLine();
+                //    Console.Write("Enter your document path : ");
+                //    D.path = Console.ReadLine();
+                //    Console.Write("Enter your document type : ");
+                //    D.type = Console.ReadLine();
+
+                //    C.documents.Add(D);
+                //}
+
+                candidates.Add(C);
+            }
+
+            Console.WriteLine("************** Applied Candidates details are given below **************");
+            Console.WriteLine("             Name            CNIC            E-mail              City            CGPA");
+
+            for(int i = 0; i < 4; i++)
+            {
+                Console.WriteLine("C{0}            {1}             {2}             {3}                 {4}             {5}", i + 1, candidates[i].name, candidates[i].cnic, candidates[i].mail, candidates[i].city, candidates[i].cgpa);
+            }
+
+            for(int i = 0; i < 4; i++)
+            {
+                if (candidates[i].cgpa >= 3.0)
+                {
+                    shortlstCands.Add(candidates[i]);
+                }
+            }
+
+            for(int i = 0; i < 2; i++)
+            {
+                P = new Project();
+                P.name = "LESCO Bill Calculator";
+                P.date = "09-10-2022";
+                P.marks = rnd.Next(1, 100);
+                for(int j = 0; j < 4; j++)
+                {
+                    shortlstCands[i].projects.Add(P);
+                }
+            }
+
+            double percentage;
+
+            for(int i = 0; i < 4; i++)
+            {
+                percentage = ((shortlstCands[i].projects[0].marks + shortlstCands[i].projects[1].marks)/2)*100;
+                if (percentage >= 90) 
+                {
+                    topperCands.Add(shortlstCands[i]);
+                }
+            }
+
+
+
+
+
+            Console.WriteLine("************** Shortlisted Candidates details are given below **************");
+            Console.WriteLine("             Name            CNIC            E-mail              City            CGPA");
+
+            for (int i = 0; i < 4; i++)
+            {
+                Console.WriteLine("C{0}           {1}             {2}             {3}                 {4}             {5}", i + 1, shortlstCands[i].name, shortlstCands[i].cnic, shortlstCands[i].mail, shortlstCands[i].city, shortlstCands[i].cgpa);
+            }
+        }
+    }
+}
