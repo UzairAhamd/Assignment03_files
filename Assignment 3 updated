@@ -1,30 +1,31 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-namespace UzairAhmadA03
+namespace UzairAhmadA03_Attempt2
 {
     public class Candidate
     {
-        public string name="name";
-        public string city="city";
-        public string cgpa="cgpa";
-        public Dictionary<string, string> D = new Dictionary<string, string>();
-        
+        public string name = "name";
+        public string city = "city";
+        public string cgpa = "cgpa";
+        public Dictionary<string, string> D = new ();
+
     }
     class Program
     {
         static void Main(string[] args)
         {
             //Dictionary<string, string> candidateData = new Dictionary<string, string>();
-            List<Dictionary<string, string>> L = new List<Dictionary<string, string>>();
+            List<Dictionary<string, string>> L = new ();
             Candidate C;
             int maxCandidateThreshold = 3;
             int maxCandidates = 0;
+            //Get all possible candidates
             Console.WriteLine("Enter info: ");
             while (maxCandidates < maxCandidateThreshold)
             {
                 C = new Candidate();
-                Console.Write("Enter Candidate "+(maxCandidates+1)+" Name: ");
+                Console.Write("Enter Candidate " + (maxCandidates + 1) + " Name: ");
                 C.D[C.name] = Console.ReadLine();
                 Console.Write("Enter Candidate " + (maxCandidates + 1) + " City: ");
                 C.D[C.city] = Console.ReadLine();
@@ -35,13 +36,11 @@ namespace UzairAhmadA03
                 {
                     Console.WriteLine("Do you want to enter more candidate data? (y/n)");
                     string bookNextCandidate = Console.ReadLine();
-                    if (bookNextCandidate == "n")
-                    {
-                        break;
-                    }
+                    if (bookNextCandidate == "n") {break;}
                 }
                 maxCandidates++;
             }
+            //Print Total Candidates
             Console.WriteLine("Total Candidates: ");
             foreach (var cand in L)
             {
@@ -51,25 +50,25 @@ namespace UzairAhmadA03
                 }
                 Console.WriteLine();
             }
-            List<Dictionary<string, string>> sortedCandidateList = new List<Dictionary<string, string>>();
+            // Get CGPA based candidates
+            List<Dictionary<string, string>> sortedCandidateList = new ();
             foreach (var dictD in L)
             {
-                foreach (var candDetail in dictD)
+                if (dictD.ContainsKey("cgpa"))
                 {
-                    if (candDetail.Key == "cgpa")
+                    if (Convert.ToDouble(dictD["cgpa"]) > 3.3)
                     {
-                        if (Convert.ToDouble(candDetail.Value) > 3.3)
-                        {
-                            sortedCandidateList.Add(dictD);
-                        }
+                        sortedCandidateList.Add(dictD);
                     }
                 }
             }
+            // Print Candidates based on CGPA
             Console.WriteLine("ShortListed Candidates: ");
+            int totalProjects= 2;
             foreach (var sortCandDetail in sortedCandidateList)
             {
-                Random rand = new Random();
-                for (int i = 0; i < 2; i++)
+                Random rand = new();
+                for (int i = 0; i < totalProjects; i++)
                 {
                     sortCandDetail["marksP" + Convert.ToString(i + 1)] = Convert.ToString(rand.Next(1, 101));
                 }
@@ -79,7 +78,8 @@ namespace UzairAhmadA03
                 }
                 Console.WriteLine();
             }
-            List<Dictionary<string, string>> passedSortedCandidateList = new List<Dictionary<string, string>>();
+            // Get Candidates with collectively equal to or more than 90% marks
+            List<Dictionary<string, string>> passedSortedCandidateList = new ();
             foreach (var dictD in sortedCandidateList)
             {
                 int j = 0;
@@ -92,11 +92,12 @@ namespace UzairAhmadA03
                         j++;
                     }
                 }
-                if (sum > 0.2 * (j + 1) * 100)
+                if (sum > 0.9 * (j + 1) * 100)
                 {
                     passedSortedCandidateList.Add(dictD);
                 }
             }
+            // print candidates who secured good marks in project
             Console.WriteLine("Passed Candidates");
             foreach (var passSortCandDetail in passedSortedCandidateList)
             {
@@ -106,23 +107,55 @@ namespace UzairAhmadA03
                 }
                 Console.WriteLine();
             }
-            List<Dictionary<string, string>> citySortedCandidateList = new List<Dictionary<string, string>>();
-            foreach (var dictD in L)
+            // get candidates from pindi
+            List<Dictionary<string, string>> citySortedCandidateList = new ();
+            foreach (var oD in sortedCandidateList)
             {
-                foreach (var candDetail in dictD)
+                foreach (var cD in oD)
                 {
-                    if (candDetail.Value == "Rawalpindi")
+                    if (cD.Value.ToLower() == "pindi")
                     {
-                        citySortedCandidateList.Add(dictD);
+                        citySortedCandidateList.Add(oD);
                     }
                 }
             }
             Console.WriteLine("City sorted:");
-            foreach (var citySortCandDetail in citySortedCandidateList)
+            foreach (var cSCD in citySortedCandidateList)
             {
-                foreach (KeyValuePair<string, string> ele2 in citySortCandDetail)
+                foreach (KeyValuePair<string, string> ele3 in cSCD)
                 {
-                    Console.Write("{0} : {1}", ele2.Key, ele2.Value + "  ");
+                    Console.Write("{0} : {1}", ele3.Key, ele3.Value + "  ");
+                }
+                Console.WriteLine();
+            }
+            ////// Get Candidates Sorted based on assignment marks
+            ////List<Dictionary<string, string>> descPassedSortedCandidateList = new ();
+            ////for (int i = 0; i< sortedCandidateList.Count-1; i++)
+            ////{
+            ////    double prevSum = 0;
+            ////    double nextSum = 0;
+            ////    for (int j = 0; j < sortedCandidateList[i].Count-1; j++)
+            ////    { 
+                    
+            ////        if (sortedCandidateList[i].ContainsKey("marksP" + Convert.ToString(j+1)))
+            ////        {
+            ////            prevSum += Convert.ToDouble(sortedCandidateList[i].ContainsKey("marksP" + Convert.ToString(j + 1)));
+            ////        }
+            ////        if (sortedCandidateList[i+1].ContainsKey("marksP" + Convert.ToString(j + 1)))
+            ////        {
+            ////            nextSum += Convert.ToDouble(sortedCandidateList[i].ContainsKey("marksP" + Convert.ToString(j + 1)));
+            ////        }
+            ////    }
+            ////    if (prevSum > nextSum) { }
+            ////}
+            // Get Candidates Sorted based on assignment marks
+            List<Dictionary<string, string>> descPassedSortedCandidateList = new();
+            // create a list to store the sum of a dictinary as an element and sort the list of dict accordingly
+            foreach (var cSCD in sortedCandidateList)
+            {
+                foreach (KeyValuePair<string, string> ele3 in cSCD)
+                {
+                    Console.Write("{0} : {1}", ele3.Key, ele3.Value + "  ");
                 }
                 Console.WriteLine();
             }
