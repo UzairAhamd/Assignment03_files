@@ -1,26 +1,37 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-namespace UzairAhmadA03_Attempt2
+namespace UzairAhmadA03
+                /*  
+                Note: For Task 7 for loops used for printing
+                      purpose aren't included
+                      in the Time Complexity Calculations
+                */
 {
+    // created Candidate class to hold attributes related to a candidate
     public class Candidate
     {
         public string name = "name";
         public string city = "city";
         public string cgpa = "cgpa";
-        public Dictionary<string, string> D = new ();
+        public Dictionary<string, string> D = new Dictionary<string, string>();     // Create a dictionary to hold the candidate information in key value form
 
     }
+    //Main class
     class Program
     {
         static void Main(string[] args)
         {
-            //Dictionary<string, string> candidateData = new Dictionary<string, string>();
-            List<Dictionary<string, string>> L = new ();
+            //-----------------------------------------------------------------
+            //-----------------------------Task-1-------------------------------
+            // Create a list of dictionary type to keep all the data in the form of dictionaries
+            List<Dictionary<string, string>> L = new List<Dictionary<string, string>>();
+            // Create an object of Candidate class
             Candidate C;
-            int maxCandidateThreshold = 3;
+            // initialize the maximum numnber of candidates
+            int maxCandidateThreshold =15;
             int maxCandidates = 0;
-            //Get all possible candidates
+            //Get all interested candidates data, note candidates can't be more than 15
             Console.WriteLine("Enter info: ");
             while (maxCandidates < maxCandidateThreshold)
             {
@@ -36,12 +47,12 @@ namespace UzairAhmadA03_Attempt2
                 {
                     Console.WriteLine("Do you want to enter more candidate data? (y/n)");
                     string bookNextCandidate = Console.ReadLine();
-                    if (bookNextCandidate == "n") {break;}
+                    if (bookNextCandidate == "n") { break; }
                 }
                 maxCandidates++;
             }
             //Print Total Candidates
-            Console.WriteLine("Total Candidates: ");
+            Console.WriteLine("Listed Candidates Data: ");
             foreach (var cand in L)
             {
                 foreach (KeyValuePair<string, string> ele2 in cand)
@@ -50,8 +61,15 @@ namespace UzairAhmadA03_Attempt2
                 }
                 Console.WriteLine();
             }
+            Console.WriteLine();
+            Console.WriteLine("Time Complexity of task1 is O(N).");
+            Console.WriteLine("----------------------------------");
+            //----------------------------------------------------------------------
+            //----------------------------------------------------------------------
+            //-----------------------------Task-2-----------------------------------
             // Get CGPA based candidates
-            List<Dictionary<string, string>> sortedCandidateList = new ();
+            //create a list of dictionary type to hold all the successful candidates
+            List<Dictionary<string, string>> sortedCandidateList = new List<Dictionary<string, string>>();
             foreach (var dictD in L)
             {
                 if (dictD.ContainsKey("cgpa"))
@@ -63,23 +81,48 @@ namespace UzairAhmadA03_Attempt2
                 }
             }
             // Print Candidates based on CGPA
-            Console.WriteLine("ShortListed Candidates: ");
-            int totalProjects= 2;
+            Console.WriteLine("ShortListed Candidates are: ");
+            foreach (var shortCan in sortedCandidateList)
+            {
+                foreach (KeyValuePair<string, string> ele2 in shortCan)
+                {
+                    Console.Write("{0} : {1}", ele2.Key, ele2.Value + "  ");
+                }
+                Console.WriteLine();
+            }
+            Console.WriteLine();
+            Console.WriteLine("Time Complexity of task2 is O(N).");
+            Console.WriteLine("----------------------------------");
+            //----------------------------------------------------------------------
+            //----------------------------------------------------------------------
+            //----------------------------Task-3------------------------------------
+            // store marks for total number of projects
+            Console.WriteLine("ShortListed Candidates with their projects' marks: ");
+            int totalProjects = 2;
             foreach (var sortCandDetail in sortedCandidateList)
             {
-                Random rand = new();
+                // use random to generate numbers between 1 and 100
+                Random rand = new Random();
                 for (int i = 0; i < totalProjects; i++)
                 {
                     sortCandDetail["marksP" + Convert.ToString(i + 1)] = Convert.ToString(rand.Next(1, 101));
                 }
+                // print the candidate info alongwith the project marks
                 foreach (KeyValuePair<string, string> ele2 in sortCandDetail)
                 {
                     Console.Write("{0} : {1}", ele2.Key, ele2.Value + "  ");
                 }
                 Console.WriteLine();
             }
-            // Get Candidates with collectively equal to or more than 90% marks
-            List<Dictionary<string, string>> passedSortedCandidateList = new ();
+            Console.WriteLine();
+            Console.WriteLine("Time Complexity of task3 is O(N^2).");
+            Console.WriteLine("----------------------------------");
+            //----------------------------------------------------------------------
+            //----------------------------------------------------------------------
+            //---------------------------------Task-4-------------------------------
+            // Get Candidates with marks collectively equal to or more than 90% 
+            List<Dictionary<string, string>> passedSortedCandidateList = new List<Dictionary<string, string>>();
+            List<double> sumProjects = new List<double>();              //to store the sum of the projects' marks for every candidate
             foreach (var dictD in sortedCandidateList)
             {
                 int j = 0;
@@ -92,13 +135,16 @@ namespace UzairAhmadA03_Attempt2
                         j++;
                     }
                 }
+                //gete teh list of the candidates with more than 90% marks
                 if (sum > 0.9 * (j + 1) * 100)
                 {
                     passedSortedCandidateList.Add(dictD);
                 }
+                sumProjects.Add(sum);                               //list of the sum of the marks of all candiates
             }
             // print candidates who secured good marks in project
-            Console.WriteLine("Passed Candidates");
+            Console.WriteLine("Candidates scored more than 90%: ");
+            int check = 0;
             foreach (var passSortCandDetail in passedSortedCandidateList)
             {
                 foreach (KeyValuePair<string, string> ele2 in passSortCandDetail)
@@ -107,58 +153,75 @@ namespace UzairAhmadA03_Attempt2
                 }
                 Console.WriteLine();
             }
-            // get candidates from pindi
-            List<Dictionary<string, string>> citySortedCandidateList = new ();
-            foreach (var oD in sortedCandidateList)
+            Console.WriteLine();
+            Console.WriteLine("Time Complexity of task4 is O(N^2).");
+            Console.WriteLine("----------------------------------");
+            //--------------------------------------------------------------------------
+            //--------------------------------------------------------------------------
+            //----------------------------------Task-5-----------------------------------
+            // get candidates from Rawalpindi
+            List<Dictionary<string, string>> citySortedCandidateList = new List<Dictionary<string, string>>();
+            foreach (var citySort in sortedCandidateList)
             {
-                foreach (var cD in oD)
+                foreach (var cCity in citySort)
                 {
-                    if (cD.Value.ToLower() == "pindi")
+                    if (cCity.Value.ToLower() == "rawalpindi")
                     {
-                        citySortedCandidateList.Add(oD);
+                        citySortedCandidateList.Add(citySort);
                     }
                 }
             }
+            // print candidates form Rawalpindi
             Console.WriteLine("City sorted:");
-            foreach (var cSCD in citySortedCandidateList)
+            foreach (var cSCDL in citySortedCandidateList)
             {
-                foreach (KeyValuePair<string, string> ele3 in cSCD)
+                foreach (KeyValuePair<string, string> ele3 in cSCDL)
                 {
                     Console.Write("{0} : {1}", ele3.Key, ele3.Value + "  ");
                 }
                 Console.WriteLine();
             }
-            ////// Get Candidates Sorted based on assignment marks
-            ////List<Dictionary<string, string>> descPassedSortedCandidateList = new ();
-            ////for (int i = 0; i< sortedCandidateList.Count-1; i++)
-            ////{
-            ////    double prevSum = 0;
-            ////    double nextSum = 0;
-            ////    for (int j = 0; j < sortedCandidateList[i].Count-1; j++)
-            ////    { 
-                    
-            ////        if (sortedCandidateList[i].ContainsKey("marksP" + Convert.ToString(j+1)))
-            ////        {
-            ////            prevSum += Convert.ToDouble(sortedCandidateList[i].ContainsKey("marksP" + Convert.ToString(j + 1)));
-            ////        }
-            ////        if (sortedCandidateList[i+1].ContainsKey("marksP" + Convert.ToString(j + 1)))
-            ////        {
-            ////            nextSum += Convert.ToDouble(sortedCandidateList[i].ContainsKey("marksP" + Convert.ToString(j + 1)));
-            ////        }
-            ////    }
-            ////    if (prevSum > nextSum) { }
-            ////}
-            // Get Candidates Sorted based on assignment marks
-            List<Dictionary<string, string>> descPassedSortedCandidateList = new();
-            // create a list to store the sum of a dictinary as an element and sort the list of dict accordingly
-            foreach (var cSCD in sortedCandidateList)
+            Console.WriteLine();
+            Console.WriteLine("Time Complexity of task5 is O(N^2).");
+            Console.WriteLine("----------------------------------");
+            //---------------------------------------------------------------------------
+            //---------------------------------------------------------------------------
+            //----------------------------------Task-6------------------------------------
+            //Get Candidates Sorted based on assignment marks
+            //create a list to store the sum of a projects' marks of a candidate and sort the list of dict accordingly
+            for (int i = 0; i < sumProjects.Count; i++)
             {
-                foreach (KeyValuePair<string, string> ele3 in cSCD)
+                for (int j = i+1; j< sumProjects.Count; j++)
                 {
-                    Console.Write("{0} : {1}", ele3.Key, ele3.Value + "  ");
+                    if (sumProjects[i] < sumProjects[j])
+                    {
+                        //sort the list of candiates and their sum rescpectively based on the greatness of their sum
+                        // dummy dictionary to store the current dictionary from the list
+                        Dictionary<string, string> dummyDict = sortedCandidateList[i];
+                        sortedCandidateList[i] = sortedCandidateList[j];
+                        sortedCandidateList[j] = dummyDict;
+                        // dummy variable to store the current sum
+                        double dummy =sumProjects[i];
+                        sumProjects[i] = sumProjects[j];
+                        sumProjects[j] = dummy;
+                    }
+                }
+            }
+            // print the candidates ont the basis of their marks in the projects
+            Console.WriteLine("Candidates listed according to their marks:");
+            foreach (var allSortCandDetail in sortedCandidateList)
+            {
+                foreach (KeyValuePair<string, string> ele4 in allSortCandDetail)
+                {
+                    Console.Write("{0} : {1}", ele4.Key, ele4.Value + "  ");
                 }
                 Console.WriteLine();
             }
+            Console.WriteLine();
+            Console.WriteLine("Time Complexity of task6 is O(N^2).");
+            Console.WriteLine("----------------------------------");
+            //---------------------------------------------------------------------------
+            //---------------------------------------------------------------------------
         }
     }
 }
